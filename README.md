@@ -3,7 +3,7 @@
 This repository contains the official implementation of the paper DiGIT: Multi-Dilated Gated Encoder and Central-Adjacent Region Integrated Decoder for Temporal Action Detection Transformer.
 
 
-[[paper]](https://arxiv.org/abs/2506.16620)
+[[paper]](https://www.arxiv.org/abs/2505.05711)
 [[CVPR paper]](https://openaccess.thecvf.com/content/CVPR2025/html/Kim_DiGIT_Multi-Dilated_Gated_Encoder_and_Central-Adjacent_Region_Integrated_Decoder_for_CVPR_2025_paper.html)
 
 ![DiGIT Model](./assets/model.png)
