@@ -8,6 +8,7 @@ This repository contains the official implementation of the paper DiGIT: Multi-D
 
 ![DiGIT Model](./assets/model.png)
 
+Note: We have recently removed inline comments and refactored several experimental components. The current version has not been fully tested yet. We will complete testing and update the repository shortly.
 
 ## Installation
 
@@ -33,7 +34,7 @@ THUMOS14 is already prepared in the repository.
 
 
 ## Training
-To train the TE-TAD model on the THUMOS14 dataset, execute the following command:
+To train the DiGIT model on the THUMOS14 dataset, execute the following command:
 ```bash
 python main.py --c config/digit/internvideo2/thumos14.py --output_dir logs/thumos14
 ```
