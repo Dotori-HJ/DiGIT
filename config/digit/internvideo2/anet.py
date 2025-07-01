@@ -16,16 +16,16 @@ resize = False
 mem_cache = True
 
 # Evaluation
-prime_metric = 'mAP_raw'
-nms_mode = ['raw']
+prime_metric = 'mAP_nms'
+nms_mode = ['raw', 'nms']
 nms_thr = 0.75
 nms_sigma = 0.75
 nms_multi_class = True
 voting_thresh = -1
 min_score = 0.001
 duration_thresh = 0.1
-# extra_cls_path = 'data/anet/anet_UMTv2_6B_k710+K40_f16_frozenTuning.json_converted.json'
-extra_cls_path = None
+extra_cls_path = 'data/anet/anet_UMTv2_6B_k710+K40_f16_frozenTuning.json_converted.json'
+# extra_cls_path = None
 iou_range = [0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95]
 display_metric_indices = [0, 5, 9]
 
