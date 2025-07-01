@@ -343,7 +343,7 @@ class DeformableTransformerDecoderLayer(nn.Module):
         tgt = self.norm2(tgt + self.dropout2(tgt2))
 
         # cross attention
-        tgt2, (sampling_locations, sampling_offsets) = self.cross_attn(
+        tgt2, _ = self.cross_attn(
             self.with_pos_embed(tgt, query_pos), reference_points, src,
             temporal_lengths, level_start_index, src_padding_mask
         )
@@ -351,7 +351,7 @@ class DeformableTransformerDecoderLayer(nn.Module):
         tgt = self.norm1(tgt)
         
         # # # cross attention_boundary
-        tgt2, (sampling_locations_se, sampling_offsets_se) = self.cross_attn_se(
+        tgt2, _ = self.cross_attn_se(
             self.with_pos_embed(tgt, query_pos), reference_points, src,
             temporal_lengths, level_start_index, src_padding_mask
         )

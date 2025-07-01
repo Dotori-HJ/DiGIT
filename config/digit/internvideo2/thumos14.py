@@ -73,7 +73,7 @@ enc_loss_coef = 1
 
 lr = 5e-5
 weight_decay = 0
-param_dict_type = 'large_wd'
+param_dict_type = 'default'
 lr_backbone = 1e-05
 lr_backbone_names = ['backbone.0']
 lr_linear_proj_names = ['sampling_offsets']

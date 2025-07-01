@@ -30,7 +30,6 @@ def _is_power_of_2(n):
 
 
 class DeformAttn(nn.Module):
-    # def __init__(self, d_model=256, n_levels=1, n_heads=8, n_points=4, dropout=0.0, base_fps=15.0):
     def __init__(self, d_model=256, n_levels=1, n_heads=8, n_points=4, dropout=0.0, base_fps=30, boundary_aware=False):
         """
         Deformable Attention Module
@@ -65,40 +64,15 @@ class DeformAttn(nn.Module):
         self.output_proj = nn.Linear(d_model, d_model)
         self.dropout = nn.Dropout(dropout)
         self.base_fps = base_fps
-        # self.base_fps = nn.Parameter(torch.tensor(base_fps))
 
         self._reset_parameters()
 
     def _reset_parameters(self):
         constant_(self.sampling_offsets.weight.data, 0.)
-        # grid_init = torch.linspace(1, -1, self.n_heads)[: None]
-        # grid_init = grid_init.view(self.n_heads, 1, 1, 1).repeat(1, self.n_levels, self.n_points, 1)
-        # for i in range(self.n_points):
-        #     grid_init[:, :, i, :] *= i + 1
-        # total_points = torch.linspace(1, self.n_points, self.n_points)
-        # spacings = torch.linspace(1, self.n_heads // 2, self.n_heads // 2).unsqueeze(1)
-
-        # pos_points = spacings * total_points
-        # neg_points = -pos_points
-        # grid_init = torch.cat([pos_points, neg_points], dim=0)
-        # grid_init = grid_init.view(self.n_heads, 1, self.n_points, 1).repeat(1, self.n_levels, 1, 1)
-
-            # grid_init = []
-            # for i in range(1, self.n_heads + 1):
-            #     grid_init_i = torch.linspace(-i, i, self.n_points + 1)
-            #     grid_init_i = torch.cat([
-            #         grid_init_i[:self.n_points // 2],
-            #         grid_init_i[self.n_points // 2 + 1:]
-            #     ], dim=0)[:, None]
-            #     grid_init.append(grid_init_i)
-            # grid_init = torch.cat(grid_init, dim=0)[:, None]
-            # grid_init = grid_init.view(self.n_heads, 1, self.n_points, 1).repeat(1, self.n_levels, 1, 1)
         if self.boundary_aware:
             half_points = self.n_points // 2
             grid_init_s = torch.linspace(-self.n_points - half_points, -self.n_points + half_points, self.n_heads * self.n_points // 2 + 1)
-            # grid_init_s = torch.linspace(-self.n_points * 2, -self.n_points, self.n_heads * self.n_points // 2 + 1)
             grid_init_e = torch.linspace(self.n_points - half_points, self.n_points + half_points, self.n_heads * self.n_points // 2 + 1)
-            # grid_init_e = torch.linspace(self.n_points, self.n_points * 2, self.n_heads * self.n_points // 2 + 1)
             grid_init = torch.cat([
                 grid_init_s[:self.n_heads * self.n_points // 4],
                 grid_init_s[self.n_heads * self.n_points // 4 + 1:],
@@ -111,13 +85,7 @@ class DeformAttn(nn.Module):
                 grid_init[:self.n_heads * self.n_points // 2],
                 grid_init[self.n_heads * self.n_points // 2 + 1:]
             ], dim=0)[:, None]
-            # grid_init = grid_init.view(self.n_points, self.n_heads).transpose(0, 1)
         grid_init = grid_init.view(self.n_heads, 1, self.n_points, 1).repeat(1, self.n_levels, 1, 1)
-
-        # grid_init = torch.linspace(-self.n_heads, self.n_heads, self.n_heads)[: None]
-        # grid_init = grid_init.view(self.n_heads, 1, 1, 1)#.repeat(1, self.n_levels, self.n_points, 1)
-        # for i in range(self.n_points):
-            # grid_init[:, :, i, :] *= i + 1
 
         with torch.no_grad():
             self.sampling_offsets.bias = nn.Parameter(grid_init.view(-1))
@@ -163,41 +131,16 @@ class DeformAttn(nn.Module):
         if reference_points.shape[-1] == 1:
             # the reference points are normalized, but the offset are unnormalized
             # so we need to normalize the offsets
-            # if self.n_levels == 1:
-            #     _cur = 0
-            #     sampling_locations = []
-            #     for lvl, T_ in enumerate(input_temporal_lens):
-            #         normalized_points = reference_points[:, _cur:(_cur + T_), None, :1, None, :] \
-            #             + sampling_offsets[:, _cur:(_cur + T_)] / T_
-            #         _cur += T_
-            #         sampling_locations.append(normalized_points)
-            #     sampling_locations = torch.cat(sampling_locations, dim=1)
-            # else:
+
             if offset_normalizer is None:
                 offset_normalizer = input_temporal_lens[None, None, None, :self.n_levels, None, None]
             else:
-                # offset_normalizer = 30 / 8 * offset_normalizer[..., None] * self.n_points / input_temporal_lens[None, ...]
-                # base_fps = 10
-                
-                # offset_normalizer = (offset_normalizer[..., None] / base_fps) * input_temporal_lens[None, ...]
-                # offset_normalizer = (offset_normalizer[..., None] / self.base_fps) * input_temporal_lens[None, ...]
                 offset_normalizer = (offset_normalizer[..., None] / self.base_fps) * input_temporal_lens[None, ...]
-                # offset_normalizer = (offset_normalizer[..., None] / self.base_fps) * input_temporal_lens[None, ...]
                 offset_normalizer = offset_normalizer[:, None, None, :self.n_levels, None, None]
 
-            # print(offset_normalizer.size(), reference_points.size(), sampling_offsets.size())
             sampling_locations = reference_points[:, :, None, :self.n_levels, None, :] \
                     + sampling_offsets / offset_normalizer
 
-            # (N, Length_{query}, n_heads, n_levels, n_points, 1)
-            # sampling_locations = []
-            # for lvl in range(self.n_levels):
-            #     locations = reference_points[:, :, None, :1, None, :] \
-            #         + 2 ** lvl * sampling_offsets[:, :, :, [lvl]] / offset_normalizer
-            #     sampling_locations.append(locations)
-            # sampling_locations = torch.cat(sampling_locations, dim=3)
-                
-                # offset_normalizer[None, None, None, :self.n_levels, None, :]
         # deform attention in the l-th (l >= 2) decoder layer when segment refinement is enabled
         elif reference_points.shape[-1] == 2:
             # offsets are related with the size of the reference segment
@@ -211,16 +154,14 @@ class DeformAttn(nn.Module):
         input_temporal_lens = input_temporal_lens[:self.n_levels]
         if value.dtype == torch.float16:
             output = MSDeformAttnFunction.apply(value.to(torch.float32), input_temporal_lens, input_level_start_index, sampling_locations.to(torch.float32), attention_weights.to(torch.float32), self.seq2col_step)
-            # output = deform_attn_core_pytorch(value.to(torch.float32), input_temporal_lens, sampling_locations.to(torch.float32), attention_weights.to(torch.float32))
             output = output.to(torch.float16)
             output = self.output_proj(output)
             return output, (sampling_locations, sampling_offsets)
 
         output = MSDeformAttnFunction.apply(value, input_temporal_lens, input_level_start_index, sampling_locations, attention_weights, self.seq2col_step)
-        sampling_locations = torch.cat((sampling_locations, torch.full_like(sampling_locations, fill_value=0.5)), dim=-1)
-        # output = deform_attn_core_pytorch(value, input_temporal_lens, sampling_locations, attention_weights)
-        # output = self.output_proj(output)
-        return output, (sampling_locations, sampling_offsets)
+        # sampling_locations = torch.cat((sampling_locations, torch.full_like(sampling_locations, fill_value=0.5)), dim=-1)
+        # return output, (sampling_locations, sampling_offsets)
+        return output, None
 
 
 def deform_attn_core_pytorch(value, temporal_lens, sampling_locations, attention_weights):
