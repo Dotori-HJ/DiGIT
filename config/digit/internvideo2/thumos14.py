@@ -62,6 +62,7 @@ emb_relu = True
 kernel_size = 3
 gc_kernel_size = 11
 dc_level = 2
+group_conv = True
 share_class_embed = True
 share_segment_embed = True
 

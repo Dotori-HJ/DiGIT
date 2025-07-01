@@ -76,7 +76,7 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
 
     _cnt = 0
     for samples, info in metric_logger.log_every(data_loader, print_freq, header, logger=logger):
-        samples = samples.to(device, non_blocking=True, dtype=torch.bfloat16)
+        samples = samples.to(device, non_blocking=True)
         info = [{
             k: v.to(device) if not isinstance(v, str) else v
             for k, v in t.items()

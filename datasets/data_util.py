@@ -244,7 +244,7 @@ def load_feature(ft_path, shape=None):
     if ext == '.npy':
         video_df = torch.from_numpy(np.load(ft_path).T).float()
     elif ext == 'torch' or ext == '' or ext == '.pt' or ext == '.pth':
-        video_df = torch.load(ft_path).T
+        video_df = torch.load(ft_path, weights_only=True).T
     elif ext == '.npz':
         video_df = torch.from_numpy(np.load(ft_path)['feats'].T).float()
     elif ext == '.pkl':

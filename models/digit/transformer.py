@@ -419,7 +419,7 @@ class DeformableTransformerDecoder(nn.Module):
             raw_query_pos = self.grid_head(grid_sine_embed) # nq, bs, 256
             query_pos = raw_query_pos
 
-            output, sampling_locations, sampling_locations_se, sampling_offsets, sampling_offsets_se = layer(output, query_pos, reference_points_input, src, temporal_lens, src_level_start_index, src_padding_mask, query_mask, attn_mask, iou_bias)
+            output = layer(output, query_pos, reference_points_input, src, temporal_lens, src_level_start_index, src_padding_mask, query_mask, attn_mask, iou_bias)
 
             # segment refinement
             if self.segment_embed is not None:
@@ -440,9 +440,9 @@ class DeformableTransformerDecoder(nn.Module):
                 intermediate_grids.append(segment_outputs)
 
         if self.return_intermediate:
-            return torch.stack(intermediate), torch.stack(intermediate_grids), sampling_locations, sampling_locations_se, sampling_offsets, sampling_offsets_se
+            return torch.stack(intermediate), torch.stack(intermediate_grids)
 
-        return output, segment_outputs, sampling_locations, sampling_locations_se, sampling_offsets, sampling_offsets_se
+        return output, segment_outputs
 
 def _get_clones(module, N):
     return nn.ModuleList([copy.deepcopy(module) for i in range(N)])

@@ -8,8 +8,6 @@ This repository contains the official implementation of the paper DiGIT: Multi-D
 
 ![DiGIT Model](./assets/model.png)
 
-Note: We have recently removed inline comments and refactored several experimental components. The current version has not been fully tested yet. We will complete testing and update the repository shortly.
-
 ## Installation
 
 #### NMS
