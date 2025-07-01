@@ -153,5 +153,4 @@ cython_debug/
 
 # Output folder
 logs/
-data/
 .idea/
