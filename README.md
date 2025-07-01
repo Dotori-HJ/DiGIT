@@ -15,7 +15,7 @@ Note: We have recently removed inline comments and refactored several experiment
 #### NMS
 ```bash
 cd util
-python setup.py # build NMS
+python setup.py install --user # build NMS
 cd ..
 ```
 

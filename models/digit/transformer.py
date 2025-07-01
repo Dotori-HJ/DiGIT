@@ -29,7 +29,7 @@ class DeformableTransformer(nn.Module):
     def __init__(self, d_model=256, n_heads=8, n_deform_heads=2, gc_kernel_size=11, dc_level=2, group_conv=True, base_scale=2.0, max_queries=3000,
                  num_encoder_layers=6, num_decoder_layers=6, dim_feedforward=1024, enc_dropout=0.1, dec_dropout=0.0, attn_dropout=0.1,
                  activation="relu", return_intermediate_dec=False, fix_encoder_proposals=True,
-                 num_feature_levels=4, num_sampling_levels=4, dec_n_points=4,  enc_n_points=4, length_ratio=-1,
+                 num_feature_levels=4, num_sampling_levels=4, dec_n_points=4, length_ratio=-1,
                  temperature=10000, num_classes=20, query_selection_ratio=0.5,
                  
                  ):
@@ -46,8 +46,7 @@ class DeformableTransformer(nn.Module):
         self.query_selection_ratio = query_selection_ratio
 
         encoder_layer = DeformableTransformerEncoderLayer(
-            d_model, dim_feedforward, gc_kernel_size, dc_level, enc_dropout, attn_dropout, activation,
-            1, n_deform_heads, enc_n_points, group_conv
+            d_model, dim_feedforward, gc_kernel_size, dc_level, enc_dropout, group_conv
         )
         self.encoder = DeformableTransformerEncoder(encoder_layer, num_encoder_layers)
 
@@ -470,7 +469,6 @@ def build_deformable_transformer(args):
         num_feature_levels=args.num_feature_levels,
         num_sampling_levels=args.num_sampling_levels,
         dec_n_points=args.dec_n_points,
-        enc_n_points=args.enc_n_points,
         length_ratio=args.length_ratio,
         temperature=args.temperature,
         num_classes=args.num_classes,
