@@ -59,7 +59,7 @@ def get_norm(norm_type, dim, num_groups=None):
 class DiGIT(nn.Module):
     """ This is the DiGIT module that performs temporal action detection """
 
-    def __init__(self, position_embedding, transformer, num_classes, num_queries, feature_dim, num_feature_levels,
+    def __init__(self, position_embedding, transformer, num_classes, feature_dim, num_feature_levels,
                  num_sampling_levels, kernel_size=3, num_cls_head_layers=3, num_reg_head_layers=3,
                  aux_loss=True, with_segment_refine=False,
                  emb_norm_type='bn', emb_relu=False, share_class_embed=False, share_segment_embed=False,
@@ -74,7 +74,6 @@ class DiGIT(nn.Module):
             with_segment_refine: iterative segment refinement
         """
         super().__init__()
-        self.num_queries = num_queries
         self.transformer = transformer
         self.num_classes = num_classes
         self.hidden_dim = hidden_dim = transformer.d_model
@@ -453,7 +452,6 @@ def build(args):
         pos_embed,
         transformer,
         num_classes=num_classes,
-        num_queries=args.num_queries,
         feature_dim=args.feature_dim,
         num_sampling_levels=args.num_sampling_levels,
         num_feature_levels=args.num_feature_levels,
