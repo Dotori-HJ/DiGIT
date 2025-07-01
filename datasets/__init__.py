@@ -24,8 +24,8 @@ def build_evaluator(subset, args):
 
 def build_dataset(subset, mode, args):
     subset_mapping, ignored_videos = get_dataset_info(args)
-    if args.datatype == 'feature':
-        return build_tad_dataset(subset_mapping[subset], mode, ignored_videos, args)
-    elif args.datatype == 'video':
-        return build_video_dataset(subset_mapping[subset], mode, ignored_videos, args)
+    # if args.datatype == 'feature':
+    return build_tad_dataset(subset_mapping[subset], mode, ignored_videos, args)
+    # elif args.datatype == 'video':
+        # return build_video_dataset(subset_mapping[subset], mode, ignored_videos, args)
     assert False, 'Invalid dataset type'
