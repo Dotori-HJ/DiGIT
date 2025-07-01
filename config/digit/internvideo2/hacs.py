@@ -1,4 +1,4 @@
-modelname = 'digit'
+_base_ = ['../_base_.py']
 
 feature_folder = 'data/features/HACS/hacs_segment_internvideo2_6b_w16_s8/hacs_6b'
 name_format = 'v_{}_spatial_pool_feature_6.pt'
@@ -37,9 +37,6 @@ label_smoothing = 0.0
 eval_interval = 1
 temperature = 10000
 normalize = False
-diou = False
-hybrid = False
-fix_encoder_proposals = True
 
 max_seq_len = 2048
 downsample_rate = 1
@@ -56,15 +53,12 @@ num_reg_head_layers = 3
 num_feature_levels = 6
 num_sampling_levels = 6
 two_stage = True
-mixed_selection = False
 emb_norm_type = 'ln'
 emb_relu = True
 kernel_size = 3
 gc_kernel_size = 11
 dc_level = 2
 group_conv = True
-share_class_embed = True
-share_segment_embed = True
 
 feature_dim = 3200
 hidden_dim = 256
@@ -76,8 +70,6 @@ cls_loss_coef = 1
 seg_loss_coef = 1
 iou_loss_coef = 2
 enc_loss_coef = 1
-mask_loss_coef = 0
-dice_loss_coef = 0
 
 lr = 1e-4
 weight_decay = 0

@@ -1,4 +1,4 @@
-modelname = 'digit'
+_base_ = ['../_base_.py']
 
 feature_folder = 'data/features/THUMOS14/thumos14_internvideo2_6b_w16_s4/thumos14_6b'
 name_format = '{}_spatial_feature.pt'
@@ -37,9 +37,6 @@ label_smoothing = 0.0
 eval_interval = 10
 temperature = 10000
 normalize = False
-diou = False
-hybrid = False
-fix_encoder_proposals = True
 
 max_seq_len = 4096
 downsample_rate = 1
@@ -56,15 +53,11 @@ num_reg_head_layers = 3
 num_feature_levels = 6
 num_sampling_levels = 6
 two_stage = True
-mixed_selection = False
 emb_norm_type = 'ln'
 emb_relu = True
 kernel_size = 3
 gc_kernel_size = 11
 dc_level = 2
-group_conv = True
-share_class_embed = True
-share_segment_embed = True
 
 feature_dim = 3200
 hidden_dim = 512
@@ -77,8 +70,6 @@ cls_loss_coef = 2
 seg_loss_coef = 0
 iou_loss_coef = 2
 enc_loss_coef = 1
-mask_loss_coef = 0
-dice_loss_coef = 0
 
 lr = 5e-5
 weight_decay = 0
