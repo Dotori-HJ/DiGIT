@@ -161,6 +161,7 @@ class DeformAttn(nn.Module):
         output = MSDeformAttnFunction.apply(value, input_temporal_lens, input_level_start_index, sampling_locations, attention_weights, self.seq2col_step)
         # sampling_locations = torch.cat((sampling_locations, torch.full_like(sampling_locations, fill_value=0.5)), dim=-1)
         # return output, (sampling_locations, sampling_offsets)
+        output = self.output_proj(output)
         return output, None
 
 
