@@ -40,7 +40,7 @@ normalize = False
 
 max_seq_len = 4096
 downsample_rate = 1
-base_scale = 32
+base_scale = 16
 
 eval_topk = 900
 length_ratio = -1
